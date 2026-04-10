@@ -3,7 +3,7 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, update
 from datetime import datetime
 from app.core.database import get_db
-from app.models.__init__ import EmailLog, Lead, LeadStatus
+from app.models import EmailLog, Lead, LeadStatus
 import base64
 
 router = APIRouter()

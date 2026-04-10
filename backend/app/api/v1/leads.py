@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from app.core.deps import get_current_tenant, get_current_user
-from app.models.__init__ import Tenant
+from app.models import Tenant
 
 router = APIRouter()
 

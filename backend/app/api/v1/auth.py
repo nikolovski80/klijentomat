@@ -7,7 +7,7 @@ import uuid
 from app.core.database import get_db
 from app.core.security import hash_password, verify_password, create_access_token
 from app.core.deps import get_current_user
-from app.models.__init__ import Tenant, User, PlanType
+from app.models import Tenant, User, PlanType
 
 router = APIRouter()
 
