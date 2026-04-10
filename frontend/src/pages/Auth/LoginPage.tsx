@@ -8,7 +8,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
-  const { setToken, setUser } = useAuthStore()
+  const { setToken, setUser, onboardingDone } = useAuthStore()
   const navigate = useNavigate()
 
   const handleSubmit = async () => {
@@ -18,7 +18,8 @@ export default function LoginPage() {
       setToken(res.data.access_token)
       const me = await authApi.me()
       setUser(me.data)
-      navigate('/')
+      // Novi korisnici (onboardingDone=false) idu na wizard
+      navigate(onboardingDone ? '/' : '/onboarding')
     } catch {
       setError('Pogrešan email ili lozinka')
     } finally {

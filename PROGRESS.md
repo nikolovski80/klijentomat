@@ -25,7 +25,7 @@
 | ID | Task | Status | Napomena |
 |---|---|---|---|
 | S1-01 | Knowledge model + CRUD API | ✅ | schemas, service, 4 endpointa, MozakPage frontend |
-| S1-02 | Onboarding wizard frontend | ⬜ | |
+| S1-02 | Onboarding wizard frontend | ✅ | 5 koraka (Firma→Branding→Usluge→FAQ→Završetak), Zustand flag, ruta guard |
 | S1-03 | File upload | ⬜ | |
 | S1-04 | Gmail OAuth2 | ⬜ | |
 | S1-05 | Google Calendar OAuth2 | ⬜ | |
@@ -78,5 +78,4 @@
 | S5-07 | Pilot klijenti | ⬜ | |
 
 ---
-Poslednje ažuriranje: S1-01 završen (2026-04-09)
-Napomena: deps.py import bug popravljen (app.models.user/tenant → app.models)
+Poslednje ažuriranje: S1-02 završen (2026-04-09)

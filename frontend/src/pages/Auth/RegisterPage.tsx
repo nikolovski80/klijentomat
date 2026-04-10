@@ -17,7 +17,7 @@ export default function RegisterPage() {
       setToken(res.data.access_token)
       const me = await authApi.me()
       setUser(me.data)
-      navigate('/')
+      navigate('/onboarding')
     } catch (e: any) {
       setError(e.response?.data?.detail || 'Greška pri registraciji')
     } finally {
