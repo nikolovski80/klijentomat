@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.core.config import settings
-from app.api.v1 import auth, leads, campaigns, knowledge, tracking
+from app.api.v1 import auth, leads, campaigns, knowledge, tracking, reviews
 
 app = FastAPI(
     title="Klijentomat API",
@@ -23,6 +23,7 @@ app.include_router(leads.router, prefix="/api/v1/leads", tags=["leads"])
 app.include_router(campaigns.router, prefix="/api/v1/campaigns", tags=["campaigns"])
 app.include_router(knowledge.router, prefix="/api/v1/knowledge", tags=["knowledge"])
 app.include_router(tracking.router, prefix="/api/v1/track", tags=["tracking"])
+app.include_router(reviews.router, prefix="/api/v1/reviews", tags=["reviews"])
 
 
 @app.get("/health")

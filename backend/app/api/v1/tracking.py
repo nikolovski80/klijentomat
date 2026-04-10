@@ -32,17 +32,30 @@ async def track_open(token: str, db: AsyncSession = Depends(get_db)):
 
 @router.get("/click/{token}")
 async def track_click(token: str, db: AsyncSession = Depends(get_db)):
-    result = await db.execute(select(EmailLog).where(EmailLog.tracking_token == token))
+    from fastapi.responses import RedirectResponse
+    from sqlalchemy import select as sa_select
+    result = await db.execute(sa_select(EmailLog).where(EmailLog.tracking_token == token))
     log = result.scalar_one_or_none()
-    if log and not log.clicked_at:
-        log.clicked_at = datetime.utcnow()
+
+    redirect_url = "/"
+    if log:
+        if not log.clicked_at:
+            log.clicked_at = datetime.utcnow()
+
+        # Dohvati website lead-a kao redirect URL
+        lead_result = await db.execute(sa_select(Lead).where(Lead.id == log.lead_id))
+        lead = lead_result.scalar_one_or_none()
+        if lead and lead.website:
+            redirect_url = lead.website
+
         await db.commit()
-    # S3-07: redirect na pravi URL (čuvati URL u EmailLog)
-    return {"status": "clicked"}
+
+    return RedirectResponse(url=redirect_url, status_code=302)
 
 
 @router.get("/unsubscribe/{token}")
 async def unsubscribe(token: str, db: AsyncSession = Depends(get_db)):
+    from fastapi.responses import HTMLResponse
     result = await db.execute(select(EmailLog).where(EmailLog.tracking_token == token))
     log = result.scalar_one_or_none()
     if log:
@@ -50,4 +63,14 @@ async def unsubscribe(token: str, db: AsyncSession = Depends(get_db)):
             update(Lead).where(Lead.id == log.lead_id).values(is_unsubscribed=True)
         )
         await db.commit()
-    return {"message": "Uspešno ste se odjavili."}
+    html = """
+    <!DOCTYPE html>
+    <html lang="sr">
+    <head><meta charset="UTF-8"><title>Odjava</title></head>
+    <body style="font-family:sans-serif;text-align:center;padding:60px;background:#f8f9fa;">
+      <h2 style="color:#333;">Uspešno ste se odjavili</h2>
+      <p style="color:#666;">Nećete više primati naše email poruke.</p>
+    </body>
+    </html>
+    """
+    return HTMLResponse(content=html, status_code=200)
