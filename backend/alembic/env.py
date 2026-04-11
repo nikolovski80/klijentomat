@@ -1,3 +1,4 @@
+import os
 import asyncio
 from logging.config import fileConfig
 from sqlalchemy import pool
@@ -5,11 +6,16 @@ from sqlalchemy.engine import Connection
 from sqlalchemy.ext.asyncio import async_engine_from_config
 from alembic import context
 
+from app.core.config import settings
+
 # Uvezi Base i sve modele da bi autogenerate radio
 from app.core.database import Base
 import app.models  # noqa: F401 — registruje sve tabele
 
 config = context.config
+
+# Postavi DATABASE_URL iz settings (čita iz .env)
+config.set_main_option("sqlalchemy.url", settings.DATABASE_URL)
 
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
